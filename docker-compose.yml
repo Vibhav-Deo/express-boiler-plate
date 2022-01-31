@@ -1,0 +1,33 @@
+version: '3.1'
+services:
+  mongodb:
+    # Official Postgres image from DockerHub (we use the last version)
+    container_name: mongodb
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: docker
+      MONGO_INITDB_ROOT_PASSWORD: docker
+  backend:
+    depends_on:
+      - 'mongodb'
+    container_name: backend
+    build:
+      context: './'
+      dockerfile: 'Dockerfile'
+    restart: always
+    environment:
+      - DEBUG=app:*,-app:nDispatcher:REMOVED
+      - DB_CONNECTION_STRING=mongodb://mongodb:27017/UniversalInterlink
+      - APP_SECRET=SIxexAGN0e9R8slV1hXbs2qpNRliWOe5391Sv66T
+      - PORT=8000
+      - HOST=localhost
+      - ENVIRONMENT=local
+      - APPLICATION_NAME=Express_Boilerplate
+    command: bash -c "npm run start"
+    ports:
+      - 8000:8000
+    links:
+      - mongodb
