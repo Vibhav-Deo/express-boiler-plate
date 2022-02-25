@@ -1,8 +1,14 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 import { ConfigurationManager } from './Config';
-import { ApplicationConfigurationModel, ConfigurationTypesEnum } from './Models';
-import { DbHelper } from './Utilities';
+import { ApplicationConfigurationModel, ConfigurationTypesEnum, LogLevelsEnum } from './Models';
+import { DbHelper, Logger } from './Utilities';
+
+const loggingMiddleWare = (request: express.Request, response: express.Response, next: express.NextFunction) => {
+    const LOGGER = new Logger();
+    LOGGER.log('Request',request.body,LogLevelsEnum.INFO);
+    next();
+}
 const startAsync = async () => {
     const APP = express();
     // parse application/x-www-form-urlencoded
@@ -10,7 +16,8 @@ const startAsync = async () => {
 
     // parse application/json
     APP.use(bodyParser.json())
-
+    
+    APP.use(loggingMiddleWare);
     const APPLICATION_CONFIGURATION = await new ConfigurationManager().getConfigurationAsync(ConfigurationTypesEnum.ApplicationConfiguration) as ApplicationConfigurationModel;
 
     APP.get('/',(request, response) => {
@@ -19,9 +26,9 @@ const startAsync = async () => {
 
     if(APPLICATION_CONFIGURATION)
     {
-        APP.listen(APPLICATION_CONFIGURATION.port,APPLICATION_CONFIGURATION.host,() => console.log(`Server started at http://${APPLICATION_CONFIGURATION.host}:${APPLICATION_CONFIGURATION.port}`));
         const DB_HELPER = new DbHelper();
-        DB_HELPER.initDbAsync();
+        await DB_HELPER.initDbAsync();
+        APP.listen(APPLICATION_CONFIGURATION.port,APPLICATION_CONFIGURATION.host,() => console.log(`Server started at http://${APPLICATION_CONFIGURATION.host}:${APPLICATION_CONFIGURATION.port}`));
     }
     else
     {

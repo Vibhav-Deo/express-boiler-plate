@@ -20,12 +20,18 @@ services:
     restart: always
     environment:
       - DEBUG=app:*,-app:nDispatcher:REMOVED
-      - DB_CONNECTION_STRING=mongodb://mongodb:27017/UniversalInterlink
       - APP_SECRET=SIxexAGN0e9R8slV1hXbs2qpNRliWOe5391Sv66T
       - PORT=8000
-      - HOST=localhost
+      - HOST=0.0.0.0
       - ENVIRONMENT=local
       - APPLICATION_NAME=Express_Boilerplate
+      - ADAPTER=mongodb
+      - DB_HOST=mongodb
+      - DB_PORT=27017
+      - DB_NAME=SampleDb
+      - DB_USER=docker
+      - DB_PASSWORD=docker
+      - AUTH_SOURCE=admin
     command: bash -c "npm run start"
     ports:
       - 8000:8000

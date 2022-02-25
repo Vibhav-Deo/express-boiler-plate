@@ -1,12 +1,20 @@
 import MONGOOSE from 'mongoose';
 import { setTimeout } from 'timers/promises';
 import { ConfigurationManager } from '../Config';
-import { ConfigurationTypesEnum, DbConfigurationModel } from '../Models';
+import { ConfigurationTypesEnum, DbConfigurationModel, LogLevelsEnum } from '../Models';
+import { Logger } from './Logger';
 const debug = require('debug')('app:DBHELPER-->');
 
 export class DbHelper {
+    private _logger: Logger;
+    
+    constructor() {
+      this._logger = new Logger()
+      
+    }
     public async initDbAsync() {
         const CAN_CONNECT = await this.tryConnectionAsync(true);
+        console.log(CAN_CONNECT);
         if (CAN_CONNECT && process.env.ENVIRONMENT == 'local') {
             await this.seedDbAsync();
         }
@@ -14,21 +22,25 @@ export class DbHelper {
 
     private async tryConnectionAsync(retryConnection: boolean) {
         let maxRetryAttempts = 10;
+        let message: string;
         if (retryConnection) {
             let result = null;
-            debug('Max db connection attempts ', maxRetryAttempts);
+            message = `Max db connection attempts ${maxRetryAttempts}`
+            this._logger.log('DB_HELPER', message, LogLevelsEnum.DEFAULT);
             result = await this.canConnectToDBAsync();
             if (result) {
                 return result;
             } else {
-                debug('Error connecting to db trying again in 10 secs');
+                message = 'Error connecting to db trying again in 10 secs';
+                this._logger.log('DB_HELPER', message, LogLevelsEnum.DEFAULT);
                 for (let attempt = 0; attempt <= maxRetryAttempts; attempt++) {
-                    debug('Trying Db connection attempt ', attempt);
-                    await setTimeout(10000);
-                    result = await this.canConnectToDBAsync();
-                    if (result) {
-                        break;
-                    }
+                  message = `Trying Db connection attempt ${attempt}`
+                  this._logger.log('DB_HELPER', message, LogLevelsEnum.DEFAULT);
+                  await setTimeout(10000);
+                  result = await this.canConnectToDBAsync();
+                  if (result) {
+                    break;
+                  }
                 }
                 return result;
             }
@@ -55,22 +67,23 @@ export class DbHelper {
     }
 
     private async seedDbAsync() {
-        debug('InSeed');
+      this._logger.log('DB_HELPER', 'InSeed', LogLevelsEnum.DEFAULT);
         //const data = require('../SeedData/seedData').data;
         try {
           const RESULT = await this.insertDataAsync();
           if (RESULT) {
-            debug('Data insert complete');
+            this._logger.log('DB_HELPER', 'Data insert complete', LogLevelsEnum.DEFAULT);
           } else {
-            debug('There was some problem inserting seed data');
+            this._logger.log('DB_HELPER', 'There was some problem inserting seed data', LogLevelsEnum.DEFAULT);
           }
         } catch (error) {
-          debug(error);
+          this._logger.log('DB_HELPER', error, LogLevelsEnum.ERROR);
         }
       };
       
       
       private async insertDataAsync() {
+        //Add logic to insert seed data
         try{
           return true;
         }

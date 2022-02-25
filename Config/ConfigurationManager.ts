@@ -28,10 +28,10 @@ export class ConfigurationManager {
             },
             dbConfiguration: {
                 adapter: String(process.env.ADAPTER),
-                userName: String(process.env.USER_NAME),
-                password: String(process.env.PASSWORD),
-                host: String(process.env.HOST),
-                port: Number(process.env.PORT),
+                userName: String(process.env.DB_USER),
+                password: String(process.env.DB_PASSWORD),
+                host: String(process.env.DB_HOST),
+                port: Number(process.env.DB_PORT),
                 dbName: String(process.env.DB_NAME)
             }
         };
