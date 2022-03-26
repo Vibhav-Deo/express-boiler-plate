@@ -16,7 +16,7 @@ const startAsync = async () => {
     await MIDDLEWARE.setUpMiddlewareAsync(APP, CONFIGURATION_MANAGER)
     
     //ROUTES
-    APP.use('/api',...ROUTES)
+    APP.use('/api/v1',...ROUTES)
 
     //Init application configuration
     const APPLICATION_CONFIGURATION = await CONFIGURATION_MANAGER.getConfigurationAsync(ConfigurationTypesEnum.ApplicationConfiguration) as ApplicationConfigurationModel;

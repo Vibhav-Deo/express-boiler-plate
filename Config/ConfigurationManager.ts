@@ -33,7 +33,7 @@ export class ConfigurationManager {
                 }
             },
             // ['.routes/*.js']
-            apis: ["./Routes/*/*.js"]
+            apis: ["./Routes/*/*/*.js"]
         } as SwaggerConfigurationModel
     }
     constructor() {

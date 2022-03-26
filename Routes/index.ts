@@ -1,2 +1,2 @@
-import { DefaultRoutes } from './DemoRoute/DemoRoute';
+import { DefaultRoutes } from './V1/DemoRoute/DemoRoute';
 export const ROUTES = [DefaultRoutes];

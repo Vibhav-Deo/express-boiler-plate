@@ -1,10 +1,10 @@
 import express from 'express';
-import { UniversalFunctions } from '../../Utilities/UniversalFunctions';
+import { UniversalFunctions } from '../../../Utilities/UniversalFunctions';
 const ROUTER = express.Router();
 const UNIVERSAL_FUNCTIONS = new UniversalFunctions();
 /**
     * @openapi
-    * /api/default:
+    * /api/v1/default:
     *   get:
     *     description: Welcome to swagger-jsdoc!
     *     responses:
