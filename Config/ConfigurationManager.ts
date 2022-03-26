@@ -1,4 +1,4 @@
-import { ConfigurationModel, ConfigurationTypesEnum } from "../Models";
+import { ConfigurationModel, ConfigurationTypesEnum, SwaggerConfigurationModel } from "../Models";
 import 'dotenv/config';
 export class ConfigurationManager {
     private _configuration: ConfigurationModel;
@@ -10,6 +10,7 @@ export class ConfigurationManager {
             {
                 case ConfigurationTypesEnum.ApplicationConfiguration: return this._configuration.applicationConfiguration;
                 case ConfigurationTypesEnum.DbConfiguration: return this._configuration.dbConfiguration;
+                case ConfigurationTypesEnum.SwaggerConfiguration: return this._configuration.swaggerConfiguration
                     
             }
         }
@@ -18,7 +19,23 @@ export class ConfigurationManager {
             throw new Error('Configuration type cannot be null')
         }
     }
-
+    getSwaggerConfiguration() {
+        return {
+            swaggerDefinition: {
+                info: {
+                    version: "1.0.0",
+                    title: "Backend",
+                    description: "Backend API Information",
+                    contact: {
+                        name: "Vibhav Deo"
+                    },
+                    servers: ["http://0.0.0.0:8000"]
+                }
+            },
+            // ['.routes/*.js']
+            apis: ["./Routes/*/*.js"]
+        } as SwaggerConfigurationModel
+    }
     constructor() {
         const configuration: ConfigurationModel = {
             applicationConfiguration: {
@@ -33,7 +50,8 @@ export class ConfigurationManager {
                 host: String(process.env.DB_HOST),
                 port: Number(process.env.DB_PORT),
                 dbName: String(process.env.DB_NAME)
-            }
+            },
+            swaggerConfiguration: this.getSwaggerConfiguration()
         };
         this._configuration = configuration;
     }

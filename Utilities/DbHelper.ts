@@ -67,7 +67,6 @@ export class DbHelper {
     }
 
     private async seedDbAsync() {
-      this._logger.log('DB_HELPER', 'InSeed', LogLevelsEnum.DEFAULT);
         //const data = require('../SeedData/seedData').data;
         try {
           const RESULT = await this.insertDataAsync();

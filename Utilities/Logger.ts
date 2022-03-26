@@ -1,17 +1,19 @@
 import { LogLevelsEnum } from "../Models";
-
+import Debug from 'debug';
 export class Logger {
     private ENVIRONMENT = process.env.ENVIRONMENT
 
     public async log(prefix: string, data: any, level: LogLevelsEnum = LogLevelsEnum.DEFAULT)
     {
+
+        const jsonData = JSON.stringify(data);
         if(this.ENVIRONMENT?.toLowerCase() == 'local')
         {
-            const DEBUG = require('debug')(prefix.toUpperCase());
+            //console.log('Here')
+            const DEBUG = Debug(`SERVER:${prefix.toUpperCase()}`);
             DEBUG(data);
         }
         else {
-            const jsonData = JSON.stringify(data);
             switch(level)
             {
                 default: console.log(prefix.toUpperCase(),' LOG - ', jsonData);
