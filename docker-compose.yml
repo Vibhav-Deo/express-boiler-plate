@@ -1,7 +1,6 @@
 version: '3.1'
 services:
   mongodb:
-    # Official Postgres image from DockerHub (we use the last version)
     container_name: mongodb
     image: mongo:latest
     restart: always
@@ -19,7 +18,7 @@ services:
       dockerfile: 'Dockerfile'
     restart: always
     environment:
-      - DEBUG=app:*,-app:nDispatcher:REMOVED
+      - DEBUG=SERVER:*
       - APP_SECRET=SIxexAGN0e9R8slV1hXbs2qpNRliWOe5391Sv66T
       - PORT=8000
       - HOST=0.0.0.0
